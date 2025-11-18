@@ -221,7 +221,7 @@ def morse_test(start, end, groups=True, tone=800, rate=0.1):
             file = open(f"results/{filename}", "w")
             file.write(result)
             file.close()
-            print(f'Results saved to "results/{filename}".')
+            print(f'Results saved to folder "results/{filename}".')
             sleep(2)
             window_status = False
             system("cls||clear")

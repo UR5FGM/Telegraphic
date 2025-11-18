@@ -1,9 +1,9 @@
-#Telegraphic version 1.1
+#Telegraphic version 2.0
 #Created by Serhii Kolomiitsev <serge.kolomeitsev@gmail.com>
 from generators import play
 from mgen import MorseGenerator
 import cw_test
-import threading
+import subprocess
 from adjustment import *
 from pynput import keyboard
 import os
@@ -14,25 +14,22 @@ import intro
 set_tone = Tone_level()
 set_rate = Rate_level()
 select_item = ""
-stop_threads = False
 
 if not os.path.isdir("results"):
     os.mkdir("results")
 if not os.path.isdir("audio"):
     os.mkdir("audio")
 
-
-
-
 def generate(char, rate, tone):
     mg = MorseGenerator(unit=rate, frequency=tone)
     play(mg.generate_text(char))
 
+def test(key):
+    if key == keyboard.Key.f1:
+        print("test")
+
 
 def additional_menu(key):
-    if stop_threads:
-        listener.join()
-
     if key == keyboard.Key.space:
         if cw_test.test_status:
             cw_test.enter_pressed()
@@ -66,11 +63,7 @@ def additional_menu(key):
             generate("v", rate=set_rate.speed, tone=set_tone.freq)
 
 
-listener = keyboard.Listener(on_press=additional_menu)
-
-
 def menu():
-    global stop_threads
     while True:
         intro.welcome()
 
@@ -103,16 +96,13 @@ def menu():
             os.system("cls||clear")
             message.text(rate=set_rate.speed, tone=set_tone.freq)
         elif select_item == "0":
-            stop_threads = True
-            print("Press any key.")
-            break
+            return""
         else:
             pass
         select_item = ""
 
-
-thread1 = threading.Thread(target=menu, daemon=True)
-thread1.start()
+listener = keyboard.Listener(on_press=additional_menu)
 listener.start()
-thread1.join()
-listener.join()
+proc=subprocess.Popen(menu(), shell=True)
+proc.terminate()
+listener.stop()

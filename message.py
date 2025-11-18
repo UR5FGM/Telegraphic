@@ -38,7 +38,7 @@ def file_write(tone=800, rate=0.1):
         audio_sorce = mg.generate_text(string_text)
         with open(f"audio/message{filename}.wav", "wb") as f:
             write_wav(f, audio_sorce)
-        print(f'Text saved to "audio/{filename}.wav.')
+        print(f'Text saved to folder "audio/{filename}.wav.')
     string_text = ""
 
 
